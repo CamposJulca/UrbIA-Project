@@ -1,7 +1,8 @@
 package urbia;
 
-import urbia.client.ThingsBoardClient;
-import urbia.model.SensorLectura;
+import urbia.api.ThingsBoardClient;
+import urbia.models.SensorLectura;
+
 
 import java.io.FileWriter;
 import java.io.PrintWriter;

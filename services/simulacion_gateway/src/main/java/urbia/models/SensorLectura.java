@@ -1,4 +1,4 @@
-package urbia.model;
+package urbia.models; // ✅ Coincide con el path: urbia/models
 
 public class SensorLectura {
     private long timestamp;
