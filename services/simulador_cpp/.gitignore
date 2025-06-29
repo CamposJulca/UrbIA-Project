@@ -1,0 +1,6 @@
+.env
+
+# Ignorar binarios y temporales
+sensor_simulator
+build/
+*.log
