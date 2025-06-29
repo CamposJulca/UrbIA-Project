@@ -3,7 +3,6 @@ package urbia.api; // ✅ Coincide con el path
 
 import io.github.cdimascio.dotenv.Dotenv;
 import urbia.models.SensorLectura;
-import urbia.api.HttpUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
