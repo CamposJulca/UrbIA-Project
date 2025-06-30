@@ -1,0 +1,11 @@
+urbia/services/AuthService.class
+urbia/utils/HttpUtils.class
+urbia/utils/DateFormatter.class
+urbia/cli/Main.class
+urbia/cli/MenuController.class
+urbia/services/DeviceService.class
+urbia/models/SensorReading.class
+urbia/models/DeviceInfo.class
+urbia/services/TelemetryService.class
+urbia/utils/JsonUtils.class
+urbia/utils/CsvExporter.class
