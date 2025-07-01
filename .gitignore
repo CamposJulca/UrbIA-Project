@@ -4,3 +4,4 @@ __pycache__/
 *.pyc
 .env
 services/presentacion_cli/lecturas_*.csv
+services/presentacion_cli/target/
