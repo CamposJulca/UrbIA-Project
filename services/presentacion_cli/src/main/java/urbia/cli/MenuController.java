@@ -20,11 +20,13 @@ public class MenuController {
     }
 
     public void iniciar() {
+        mostrarBienvenida();
+
         DeviceService deviceService = new DeviceService(token);
         List<DeviceInfo> dispositivos = deviceService.obtenerDispositivos();
 
         if (dispositivos.isEmpty()) {
-            System.out.println("⚠️ No se encontraron dispositivos.");
+            System.out.println("⚠️  No se encontraron dispositivos disponibles en ThingsBoard.");
             return;
         }
 
@@ -33,47 +35,77 @@ public class MenuController {
             int opcion = leerOpcion(dispositivos.size());
 
             if (opcion == 0) {
-                System.out.println("👋 Saliendo del sistema...");
-                break;
+                if (confirmarSalida()) break;
+                else continue;
             }
 
             DeviceInfo seleccionado = dispositivos.get(opcion - 1);
             manejarDispositivo(seleccionado);
         }
+
+        System.out.println("✅ Sesión finalizada correctamente.");
+    }
+
+    private void mostrarBienvenida() {
+        System.out.println("""
+                ┌──────────────────────────────────────────────┐
+                │ 🌐 UrbIA CLI - Cliente de monitoreo IoT       │
+                └──────────────────────────────────────────────┘
+                Bienvenido. Este sistema permite:
+                - Consultar dispositivos registrados
+                - Visualizar lecturas recientes de sensores
+                - Exportar las lecturas a un archivo CSV
+
+                ℹ️ Use los números del menú para navegar.
+                ❓ En cualquier momento, escriba "?" para ayuda.
+                """);
     }
 
     private void mostrarMenuDispositivos(List<DeviceInfo> dispositivos) {
-        System.out.println("\n📋 Dispositivos disponibles:");
+        System.out.println("\n📋 Lista de dispositivos disponibles:");
         for (int i = 0; i < dispositivos.size(); i++) {
-            System.out.printf("%d) %s%n", i + 1, dispositivos.get(i).getName());
+            System.out.printf(" %2d) %s%n", i + 1, dispositivos.get(i).getName());
         }
-        System.out.println("0) Salir");
+        System.out.println("  0) Salir");
         System.out.print("👉 Seleccione un dispositivo: ");
     }
 
     private int leerOpcion(int max) {
+        String entrada = scanner.nextLine().trim();
+
+        if (entrada.equals("?")) {
+            System.out.println("""
+                ℹ️ AYUDA:
+                - Ingrese un número entre 1 y %d para seleccionar un dispositivo.
+                - Ingrese 0 para salir del sistema.
+                - Después de visualizar lecturas, podrá exportarlas a CSV.
+                """.formatted(max));
+            return leerOpcion(max);
+        }
+
         try {
-            int opcion = Integer.parseInt(scanner.nextLine());
+            int opcion = Integer.parseInt(entrada);
             if (opcion >= 0 && opcion <= max) {
                 return opcion;
             }
         } catch (NumberFormatException ignored) {}
+
         System.out.println("❌ Entrada inválida. Intente de nuevo.");
         return leerOpcion(max);
     }
 
     private void manejarDispositivo(DeviceInfo dispositivo) {
-        System.out.printf("📌 Dispositivo seleccionado: %s%n", dispositivo.getName());
+        System.out.printf("%n📌 Dispositivo seleccionado: %s%n", dispositivo.getName());
 
         TelemetryService telemetryService = new TelemetryService(token);
         List<SensorReading> lecturas = telemetryService.obtenerLecturasRecientes(dispositivo.getId());
 
         if (lecturas.isEmpty()) {
-            System.out.println("⚠️ No hay lecturas disponibles para este dispositivo.");
+            System.out.println("⚠️  No se encontraron lecturas recientes para este dispositivo.");
             return;
         }
 
-        System.out.println("📈 Últimas lecturas:");
+        System.out.println("📈 Últimas lecturas disponibles:");
         for (SensorReading lectura : lecturas) {
             System.out.printf("📍 [%s] %s = %s%n",
                     lectura.getFormattedTimestamp(),
@@ -81,10 +113,18 @@ public class MenuController {
                     lectura.getValue());
         }
 
-        System.out.print("💾 ¿Desea exportar a CSV? (s/n): ");
+        System.out.print("\n💾 ¿Desea exportar estas lecturas a CSV? (s/n): ");
         String respuesta = scanner.nextLine().trim().toLowerCase();
         if (respuesta.equals("s")) {
             CsvExporter.exportar(lecturas, dispositivo.getName());
+        } else {
+            System.out.println("📁 Exportación omitida.");
         }
+    }
+
+    private boolean confirmarSalida() {
+        System.out.print("❓ ¿Está seguro de que desea salir? (s/n): ");
+        String respuesta = scanner.nextLine().trim().toLowerCase();
+        return respuesta.equals("s") || respuesta.equals("si");
     }
 }
