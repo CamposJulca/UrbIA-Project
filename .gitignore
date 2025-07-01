@@ -3,3 +3,4 @@ __pycache__/
 *.log
 *.pyc
 .env
+services/presentacion_cli/lecturas_*.csv
