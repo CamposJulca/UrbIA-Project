@@ -18,45 +18,61 @@ Cada sensor es una clase que hereda de `SensorBase`. Se generan valores aleatori
 - `libcurl` instalado (`sudo apt install libcurl4-openssl-dev`)
 - Sistema Linux/Unix
 - Servidor ThingsBoard local o remoto corriendo en `http://localhost:8080`
+- 📦 **Librería `nlohmann/json.hpp` (no incluida en el repositorio)**
+
+---
+
+## ⚠️ Dependencia Externa: `nlohmann/json.hpp`
+
+Este archivo no se incluye en el repositorio (está en `.gitignore`).  
+Antes de compilar, debes instalarlo manualmente así:
+
+```bash
+# Crear la carpeta si no existe
+mkdir -p include/nlohmann
+
+# Descargar el archivo desde el repositorio oficial
+curl -o include/nlohmann/json.hpp https://raw.githubusercontent.com/nlohmann/json/develop/single_include/nlohmann/json.hpp
+````
 
 ---
 
 ## 📁 Estructura del Proyecto
 
 ```
-
-simulador\_cpp/
+simulador_cpp/
 ├── include/         # Headers de sensores, cliente HTTP, logger, loader .env
-│   ├── Sensor\*.hpp
+│   ├── Sensor*.hpp
 │   ├── HttpClient.hpp
 │   ├── EnvLoader.hpp
-│   └── Logger.hpp
+│   ├── Logger.hpp
+│   └── nlohmann/     # <--- DEBES CREAR ESTA CARPETA Y AÑADIR json.hpp
+│       └── json.hpp
 ├── src/             # Implementaciones
-│   ├── Sensor\*.cpp
+│   ├── Sensor*.cpp
 │   ├── HttpClient.cpp
 │   ├── EnvLoader.cpp
 │   └── Logger.cpp
 ├── logs/            # Log del simulador
 │   └── simulador.log
 ├── build/           # Objetos compilados
-├── sensor\_simulator # Ejecutable
+├── sensor_simulator # Ejecutable
 ├── Makefile         # Script de compilación
 └── .env             # Token del dispositivo
-
-````
+```
 
 ---
 
 ## 📦 Sensores Simulados
 
-| Sensor         | Rango              | Unidad |
-|----------------|--------------------|--------|
-| CO₂            | 400 – 600          | ppm    |
-| Temperatura    | 20.0 – 35.0        | °C     |
-| Humedad        | 40.0 – 80.0        | %      |
-| Presión        | 990.0 – 1025.0     | hPa    |
-| Luz            | 0 – 1000           | Lux    |
-| Ruido          | 30.0 – 120.0       | dB     |
+| Sensor      | Rango          | Unidad |
+| ----------- | -------------- | ------ |
+| CO₂         | 400 – 600      | ppm    |
+| Temperatura | 20.0 – 35.0    | °C     |
+| Humedad     | 40.0 – 80.0    | %      |
+| Presión     | 990.0 – 1025.0 | hPa    |
+| Luz         | 0 – 1000       | Lux    |
+| Ruido       | 30.0 – 120.0   | dB     |
 
 ---
 
@@ -68,7 +84,7 @@ En la raíz del módulo (`simulador_cpp/`):
 
 ```env
 THINGSBOARD_TOKEN=<<TU_TOKEN_AQUI>>
-````
+```
 
 Este token debe corresponder al dispositivo registrado en ThingsBoard.
 
@@ -128,5 +144,6 @@ http://localhost:8080/api/v1/<TOKEN>/telemetry
 ✅ Datos enviados correctamente.
 ```
 
----
+```
 
+---
