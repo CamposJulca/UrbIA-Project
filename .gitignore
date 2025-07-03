@@ -6,3 +6,20 @@ __pycache__/
 services/presentacion_cli/lecturas_*.csv
 services/presentacion_cli/target/
 node_modules/
+# ──────────────────────────────
+# Ignorar base de datos local
+services/nodo_edge/data/*.db
+
+# Ignorar archivos compilados de Java
+services/presentacion_cli/target/
+
+# Ignorar resultados y gráficos temporales
+services/procesamiento_spark/data/ejecuciones/
+services/procesamiento_spark/data/graficos/
+
+# Ignorar archivos de pruebas temporales
+services/procesamiento_spark/test_spark_session.py
+
+# Ignorar configuración sensible (si aplica)
+.env
+*.env
