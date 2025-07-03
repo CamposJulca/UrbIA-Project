@@ -23,3 +23,5 @@ services/procesamiento_spark/test_spark_session.py
 # Ignorar configuración sensible (si aplica)
 .env
 *.env
+
+services/procesamiento_spark/conf/
