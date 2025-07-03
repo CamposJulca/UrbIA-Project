@@ -4,3 +4,6 @@
 sensor_simulator
 build/
 *.log
+
+# Ignorar librería externa JSON
+include/nlohmann/
