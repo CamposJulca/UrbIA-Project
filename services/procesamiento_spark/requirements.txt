@@ -1,0 +1,1 @@
+pyspark\npsycopg2-binary\ndotenv
