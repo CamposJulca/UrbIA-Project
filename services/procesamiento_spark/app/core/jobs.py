@@ -13,7 +13,7 @@ from app.schemas.metrics_schema import SensorMetric
 logger = get_logger(__name__)
 
 def read_from_sqlite(spark: SparkSession):
-    path = os.getenv('SQLITE_PATH')
+    path = os.getenv('SQLITE_DB_PATH')
     table = os.getenv("SQLITE_TABLE", "resumen_edge")
 
     print(f"🔍 Intentando leer SQLite desde: {path}")
@@ -101,9 +101,18 @@ def run_etl_job():
                 max("valor").alias("maximo"),
                 max("ts").alias("timestamp")
             )
+
+        # 🔧 Corrección de tipo 'luminosidad' a 'luz' para validación
+        from pyspark.sql import functions as F
+        agg_df = agg_df.withColumn(
+            "tipo",
+            F.when(F.col("tipo") == "luminosidad", "luz").otherwise(F.col("tipo"))
+        )
+
         print("📊 Agregación completada.")
         agg_df.show(5)
         logger.info(f"📊 Datos agregados: {agg_df.count()} métricas")
+
     except Exception as e:
         print(f"❌ Error durante la agregación: {e}")
         logger.error(f"❌ Error en la agregación de datos: {e}")

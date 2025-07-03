@@ -37,7 +37,12 @@ fi
 
 # 6. Ejecutar Spark Job
 echo "🚀 Ejecutando procesamiento Spark..."
-spark-submit --jars "$SQLITE_JAR_PATH" app/core/jobs.py
+spark-submit \
+  --jars "$SQLITE_JAR_PATH" \
+  --conf "spark.ui.showConsoleProgress=false" \
+  --conf "spark.driver.extraJavaOptions=-Dlog4j.configuration=file:conf/log4j-error.properties" \
+  app/core/jobs.py
+
 EXIT_CODE=$?
 
 if [ $EXIT_CODE -ne 0 ]; then
