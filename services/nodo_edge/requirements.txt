@@ -1,0 +1,9 @@
+# Requisitos del proyecto nodo_edge (FastAPI, SQLite, etc.)
+
+fastapi==0.111.0
+uvicorn[standard]==0.29.0
+python-dotenv==1.0.1
+
+httpx
+pytest
+pytest-asyncio
